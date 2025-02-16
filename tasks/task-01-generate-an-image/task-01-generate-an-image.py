@@ -1,8 +1,6 @@
 import argparse
-
-import cv2
 import numpy as np
-
+import cv2
 
 def generate_image(seed, width, height, mean, std):
     """
@@ -18,7 +16,6 @@ def generate_image(seed, width, height, mean, std):
     Returns:
         image (numpy.ndarray): The generated image.
     """
-
     ### START CODE HERE ###
 
     # seed para geração aleatória
