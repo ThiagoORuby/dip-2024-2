@@ -17,7 +17,18 @@ def generate_image(seed, width, height, mean, std):
         image (numpy.ndarray): The generated image.
     """
     ### START CODE HERE ###
-    ### TODO
+
+    # seed para geração aleatória
+    np.random.seed(seed)
+
+    # gera uma matriz w x h com valores dentro da distribuição normal
+    # e garante que os resultados estejam no intervalo [0,255] (uint8)
+    image = np.random.normal(
+        loc=mean,
+        scale=std,
+        size = (width, height)
+    ).astype(np.uint8)
+
     ### END CODE HERE ###
 
     return image
