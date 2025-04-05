@@ -75,6 +75,10 @@ def get_npcc(i1: np.ndarray, i2: np.ndarray) -> float:
 
 def compare_images(i1: np.ndarray, i2: np.ndarray) -> dict:
     # Your implementation here
+    
+    if i1.shape != i2.shape:
+        raise Exception("Imagens precisam ter mesmas dimensões")
+    
     return {
         "mse": get_mse(i1, i2),
         "psnr": get_psnr(i1, i2, 255),
