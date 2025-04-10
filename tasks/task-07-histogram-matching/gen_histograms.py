@@ -1,32 +1,6 @@
-# histogram_matching_exercise.py
-# STUDENT'S EXERCISE FILE
-
-"""
-Exercise:
-Implement a function `match_histograms_rgb(source_img, reference_img)` that receives two RGB images
-(as NumPy arrays with shape (H, W, 3)) and returns a new image where the histogram of each RGB channel 
-from the source image is matched to the corresponding histogram of the reference image.
-
-Your task:
-- Read two RGB images: source and reference (they will be provided externally).
-- Match the histograms of the source image to the reference image using all RGB channels.
-- Return the matched image as a NumPy array (uint8)
-
-Function signature:
-    def match_histograms_rgb(source_img: np.ndarray, reference_img: np.ndarray) -> np.ndarray
-
-Return:
-    - matched_img: NumPy array of the result image
-
-Notes:
-- Do NOT save or display the image in this function.
-- Do NOT use OpenCV to apply the histogram match (only for loading images, if needed externally).
-- You can assume the input images are already loaded and in RGB format (not BGR).
-"""
-
 import cv2 as cv
+import matplotlib.pyplot as plt
 import numpy as np
-import skimage as ski
 
 
 def compute_cdf(img: np.ndarray) -> np.ndarray:
@@ -61,3 +35,35 @@ def match_histograms_rgb(source_img: np.ndarray, reference_img: np.ndarray) -> n
 
     # retorna canais mesclados
     return cv.merge(matched)
+
+
+source_img = cv.imread("source.jpg")
+source_img = cv.cvtColor(source_img, cv.COLOR_BGR2RGB)
+reference_img = cv.imread("reference.jpg")
+reference_img = cv.cvtColor(reference_img, cv.COLOR_BGR2RGB)
+matched_img =  match_histograms_rgb(source_img, reference_img)
+
+images = {}
+images["source"] = source_img
+images["reference"] = reference_img
+images["matched"] = matched_img
+
+
+_, axs = plt.subplots(3, 4, figsize=(25, 20))
+
+for i, (name, img) in enumerate(images.items()):
+    axs[i, 0].imshow(img)
+    axs[i, 0].set_title(name)
+    axs[i, 0].axis("off")
+
+for i, channel in enumerate(["red", "green", "blue"]):
+    for j, (name, img) in enumerate(images.items()):
+        hist, bins = np.histogram(img[:, :, i].flatten(),
+                                  bins=256, range=(0,256))
+        pdf = hist / hist.sum()
+        axs[j, i+1].bar(bins[:-1], pdf, width=1,
+                        color=f"tab:{channel}", alpha=0.6)
+        axs[j, i+1].set_title(f"channel: {channel}")
+
+plt.tight_layout()
+plt.savefig("histograms.jpg")
